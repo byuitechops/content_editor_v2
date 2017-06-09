@@ -1,0 +1,11 @@
+.editorContainer {
+  margin: 2rem 1rem;
+  min-height: 10rem;
+}
+.saveWarning {
+  color: #fff176;
+}
+.saveWarning::after {
+  background: #ff8a65;
+  color: #bf360c;
+}
