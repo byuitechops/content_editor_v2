@@ -9,3 +9,8 @@
   background: #ff8a65;
   color: #bf360c;
 }
+
+#main {
+  width: 100% !important;
+  margin: 0 !important;
+}
