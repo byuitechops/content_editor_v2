@@ -14,6 +14,7 @@ window.onload = function() {
         $('#saveBtn').attr('data-badge', '!');
       });
     },
+    height : "50rem",
     auto_focus: 'initial_textarea',
     plugins: [
       'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker template',
