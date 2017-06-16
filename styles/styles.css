@@ -40,6 +40,9 @@
   outline: none;
   color: #757575 !important;
 }
+.commitField:focus {
+  color: #424242 !important;
+}
 .versionTable {
   margin-bottom: 1rem;
 }
