@@ -1,4 +1,5 @@
 window.onload = function() {
+  var fileName;
   var file_sha;
   var file_path;
   var bodyHtml;
@@ -9,11 +10,33 @@ window.onload = function() {
     selector: '#initial_textarea',
     browser_spellcheck: true,
     setup: function(editor) {
+      // Check for changes in editor
       editor.on('change', function(e) {
-        $('#saveBtn').addClass('saveWarning');
-        $('#saveBtn').attr('data-badge', '!');
+        console.log(editor.isDirty());
+        var clean = $('#mceu_0').hasClass('mce-disabled');
+        if(clean) {
+          $('.saveBtn').removeClass('saveWarning');
+          $('.saveBtn').attr('');
+        } else {
+          $('.saveBtn').addClass('saveWarning');
+          $('.saveBtn').attr('data-badge', '!');
+        }
+      });
+      editor.on('init', function(editor) {
+        console.log(tinymce.UndoManager);
+        tinymce.onUndo(function(e) {
+        // tinymce.UndoManager.hasUndo(function(e) {
+          console.log("undo-ed");
+          var clean = $('#mceu_0').hasClass('mce-disabled');
+          if(clean) {
+            console.log("clearing");
+            $('.saveBtn').removeClass('saveWarning');
+            $('.saveBtn').attr('');
+          }
+        });
       });
     },
+    isNotDirty: true,
     height : "50rem",
     auto_focus: 'initial_textarea',
     plugins: [
@@ -32,54 +55,87 @@ window.onload = function() {
   });
 
   //Fetch data from GitHub
-  // $.ajax({
-  //   url: "https://api.github.com/repos/ta1188/ta1188.github.io/contents",
-  //   context: document.body
-  // }).done(function(data) {
-  //   $.each(data, function( index, value ) {
-  //     var fileName = value.name;
-  //
-	// 		if (index == 3) {
-	// 			file_sha = value.sha;
-	// 			file_path = value.path;
-  //       $.ajax({
-  //         url: value.download_url,
-  //         context: document.body
-	// 			}).done(function(result) {
-	// 				$('#fileName_title').html(fileName);
-  //
-  //         bodyHtml = result;
-  //
-  //         var bodyOpen = bodyHtml.indexOf('<body');
-  //         if(bodyOpen == -1)
-  //             bodyOpen = bodyHtml.indexOf('< body');
-  //
-  //         var bodyClose = bodyHtml.indexOf('</body>') + 6;
-  //         if(bodyClose == -1)
-  //             bodyClose = bodyHtml.indexOf('</ body>') + 7;
-  //
-  //         if(bodyOpen != -1 && bodyClose != -1){
-  //             this.bodyHtml = bodyHtml.substring(bodyOpen, bodyClose);
-  //             this.bodyHtml += '>';
-  //             // var divHtml = document.createElement('div');
-  //             // divHtml.style.display = 'none';
-  //             // divHtml.innerHTML = bodyHtml;
-  //             // console.log(editor);
-  //             // editor.val(bodyHtml);
-  //             $('#tinymce').val("TEST");
-  //         }
-  //         else{
-  //             console.log('did not work');
-  //         }
-  //       });
-  //     }
-  //   })
-  // }).fail(function() {
-  //   console.log( "error" );
-  // });
-  var pageCode = '<html lang="en"><head><meta charset="utf-8"><title>AGBUS 105 - Syllabus</title><link href="https://content.byui.edu/integ/gen/be2c7d0f-ed5e-4dca-ac0b-0b2a7155a4f2/0/byuidefault.css" rel="stylesheet" type="text/css"></head><body><div id="main" style="width: 100% !important; margin: 0 !important; max-width: 100% !important;"><div id="header"><img alt="BYU-Idaho Online Learning" src="https://content.byui.edu/integ/gen/be2c7d0f-ed5e-4dca-ac0b-0b2a7155a4f2/0/Online-Learning_Black.png"></div><div id="article"><p>This course and the associated certificate are designed for international students in agricultural based economies.</p><h1>Syllabus</h1><hr /><h2>Course Outcomes</h2><ul><li>Identify and explain the organization and opportunities and the agribusiness industry in your country and the world.</li><li>Explain the character traits of a successful agribusiness manager.</li><li>Identify and explain the basic microeconomic principles that are applicable in the management of agribusiness operations.</li><li>Describe the available resources commonly used in an agribusiness enterprise, where they are located, and how you acquire them.</li><li>Explain how agribusiness management and entrepreneurship can bless your family and prepare them and you for the future.</li><li>Develop a business plan for a selected agribusiness enterprise outlining the production, processing, distributing, financing, and marketing.</li></ul><h2>Course Description</h2><p>This course will introduce you to the business of agriculture. You will learn concepts in agribusiness management that you will use in developing a business plan for your business. This course will be an important component in the agribusiness certificate program that you are enrolled in. It will provide a foundation for your career, empowering you in becoming a successful agribusiness manager.</p><h2>Learning Model Architecture</h2><p>As in all BYU-Idaho courses, this course will utilize the BYU-I Learning Model. You will prepare by completing the assigned readings each week. Teaching one another will occur as you complete activities in which you teach family members or friends and participate in class discussions. Finally, you will ponder and prove by demonstrating understating through completing quizzes and assignments. As part of your assignments, you will create a business plan.</p><h2>Course Expectations</h2><p>The following are recommendations for success in this class:</p><ul><li>The BYU-Idaho standard for the student workload in courses is 3-4 hours per week per credit hour. Thus, you should plan to spend at least nine hours per week on this course. You may need to spend more, depending upon your own learning style and skill set.</li><li>Read all material in every course page. This includes the Lesson Overviews and announcements. Do NOT rely exclusively on your calendar to inform you of work to be accomplished. Some course pages do not have due dates associated with them, thus, they will not appear on your calendar. However, each page contains important information!</li><li>Plan your time so that you work consistently throughout each lesson. You will have a quality learning experience and less stress if you spread the work throughout each lesson.</li></ul><h2>Prerequisites</h2><p>There are no prerequisites for this course.</p><h2>Required Materials</h2><ul><li><em>Access to a computer with internet connection and appropriate technical setup</em>. Test your setup by following the instructions in the technical setup section of the Orientation to Online Learning found in the Welcome module.</li><li><em>Microsoft Word and Excel. </em>If you do not already have access to this software, you may download it for free from the BYUI bookstore. Go to <a href="http://www.byui.edu/information-technology/help-categories/microsoft-office" target="_blank">http://www.byui.edu/information-technology/help-categories/microsoft-office</a> for instructions on how to do this for PC and Mac.</li></ul><h3>Note</h3><p>Readings are supplied within the course.</p><h2>Course Work</h2><p>Assignments and activities are designed to increase the depth of your learning. Through these, you will apply the principles you have learned to situations similar to those you will encounter professionally and personally.</p><p>Major assignments are due at the end of the week in order to give you the opportunity to use the full week to work on such items. Make sure you set your computer to your local time so that the due dates will be adjusted to reflect your time zone.</p><h3>Readings and videos</h3><p>There will be various readings and videos that you will have the opportunity to read throughout the semester. It is important that you read and study them thoroughly, as they will prepare you for your assignments. At times, you are asked to engage in activities related to the reading, such as teaching a friend or family member about a concept that you have learned. You will account for your reading, video viewing, and activity completion in a weekly self-assessment.</p><h3>Reading Quizzes</h3><p>The quizzes are based on the readings for the week.</p><h3>Discussions</h3><p>In most lessons you will share your learning and perspective through discussion board posts.</p><h3>Assignment</h3><p>Assignments that are based on the readings for the week and allow you to practice with the concepts learned.</p><h3>Reflection Journal</h3><p>At the end of each week, you will write a short paper in which you describe the impact of the week\'s lesson on you.</p><h3>Business Plan</h3><p>In Lesson 5 through 14 you will develop a business plan for an actual agribusiness enterprise that you would like to develop or expand. Completing each component of the plan will prepare you to effectively manage you current business or start a new business.</p><h4>Note</h4><p>Not all lessons contain all of the above activities.</p><h2>Typical Weekly Pattern</h2><p>There are generally three due dates each week.</p><ul><li>Due Date #1 &ndash; Read the Lesson 0verview and materials pages. If there is a discussion, you will often have a post due on this day.</li><li>Due Date #2 &ndash; This varies with each lesson, but often you will have a discussion response or an assignment due.</li><li>Due Date #3 &ndash; Major assignments (such as business plan assignments) are always due at the end of the week to give you the full week to work on them. The self-assessment and Reflection Journal entries are also due at the end of the week.</li></ul><h2>Self-Reliance Program</h2><p>Principles taught in this course are consistent with the Church\'s self-reliance program. If desired, you may investigate the church\'s self-reliance resources. The Church establishes Self Reliance Centers and Self Reliance counselors in many parts of the world. (Note that some areas only have counselors.) At the beginning of the semester, it is recommended that you check your local Church unit to see if a Self Reliance center and/or a Self Reliance Counselor is available in your area. If so, contact your center/counselor and describe your situation, including that you are enrolled in this course. The center/counselor may be able to provide useful resources and perspective that are specific to your location.</p><h2>Grading Policies</h2><p>You will be graded on a linear scale (not curved). An "A" is a merit that will require dedication and mastery of subject matter. Just completing the minimum expectations does not denote "A" effort. You will need to take the time to study, understand, and apply the principles taught in order to get an "A".</p><h2>Grading Scale</h2><p>This course will use the following standard BYU-Idaho grading scale:</p><table style="width: 129.156px;"><tbody><tr style="height: 49px;"><td style="width: 38px; height: 49px;"><p>A</p></td><td style="width: 87.1563px; height: 49px;"><p>93-100%</p></td></tr><tr style="height: 49px;"><td style="width: 38px; height: 49px;"><p>A-</p></td><td style="width: 87.1563px; height: 49px;"><p>90-92%</p></td></tr><tr style="height: 49px;"><td style="width: 38px; height: 49px;"><p>B+</p></td><td style="width: 87.1563px; height: 49px;"><p>87-89%</p></td></tr><tr style="height: 49px;"><td style="width: 38px; height: 49px;"><p>B</p></td><td style="width: 87.1563px; height: 49px;"><p>83-86%</p></td></tr><tr style="height: 49px;"><td style="width: 38px; height: 49px;"><p>B-</p></td><td style="width: 87.1563px; height: 49px;"><p>80-82%</p></td></tr><tr style="height: 49.9844px;"><td style="width: 38px; height: 49.9844px;"><p>C+</p></td><td style="width: 87.1563px; height: 49.9844px;"><p>77-79%</p></td></tr><tr style="height: 49.9844px;"><td style="width: 38px; height: 49.9844px;"><p>C</p></td><td style<tr style="height: 49.9844px;"><td style="width: 38px; height: 49.9844px;"><p>C-</p></td><td style="width: 87.1563px; height: 49.9844px;"><p><span>70-72%</span></p></td></tr><tr style="height: 49.9844px;"><td style="width: 38px; height: 49.9844px;"><p>D+</p></td><td style="width: 87.1563px; height: 49.9844px;">  <p><span>67-69%</span></p></td></tr> <tr style="height: 49.9844px;"> <td style="width: 38px; height: 49.9844px;"> <p>D</p> </td> <td style="width: 87.1563px; height: 49.9844px;"> <p><span>63-66%</span></p> </td> </tr> <tr style="height: 49.9844px;"> <td style="width: 38px; height: 49.9844px;"> <p>D-</p> </td> <td style="width: 87.1563px; height: 49.9844px;"> <p><span>60-62%</span></p> </td> </tr> <tr style="height: 49.9844px;"> <td style="width: 38px; height: 49.9844px;"> <p>F</p> </td> <td style="width: 87.1563px; height: 49.9844px;"> <p><span>0-59%</span></p> </td> </tr> </tbody> </table> <h2>Grading Components</h2> <p>Grades will be determined as follows:</p> <table style="width: 275.156px;"> <tbody> <tr> <td style="width: 208px;"> <p>Assignments</p> </td> <td style="width: 65.1563px;"> <p>23%</p> </td> </tr> <tr> <td style="width: 208px;"> <p>Reading quizzes</p> </td> <td style="width: 65.1563px;"> <p>10%</p> </td> </tr> <tr> <td style="width: 208px;"> <p>Discussions</p> </td> <td style="width: 65.1563px;"> <p>10%</p> </td> </tr> <tr> <td style="width: 208px;"> <p>Business Plan Assignments</p> </td> <td style="width: 65.1563px;"> <p>32%</p> </td> </tr> <tr> <td style="width: 208px;"> <p>Reflections</p> </td> <td style="width: 65.1563px;"> <p>15%</p> </td> </tr> <tr> <td style="width: 208px;"> <p>Self-Assesments</p> </td> <td style="width: 65.1563px;"> <p>8%</p> </td> </tr> <tr> <td style="width: 208px;"> <p>Misc. Items</p> </td> <td style="width: 65.1563px;"> <p>2%</p> </td> </tr> <tr> <td style="width: 208px;"> <p><strong> Total </strong></p> </td> <td style="width: 65.1563px;"> <p>100%</p> </td> </tr> </tbody> </table> <h2>Late Work Policy</h2> <p>Students should complete their work on time, and generally, late work will not be accepted. However, the instructor has discretion to accept late work or extend due dates in case of extenuating circumstances.</p> <h2>Tutoring</h2> <p>Tutoring options for online students are available through the Academic Support Centers. There are tutors available to help you with writing questions and there may be course-specific tutoring available.</p> <h2>Honor Code</h2> <p>Following the honor code is of great importance as you strive to be a disciple of Christ. Your commitment to live the Honor Code will contribute to the overall BYU-Idaho Community. Your actions should be respectful and should foster an environment where all can feel the Sprit.</p> <p>BYU-Idaho\'s Dress and Grooming standards apply to all students, including online students. By adhering to the honor code you will create a learning environment, "consistent with the ideals and principles of The Church of Jesus Christ of Latter-Day saints." For more detailed information, see the Honor Code webpage.</p> <h2>Disclaimers</h2> <p>Each student has a responsibility to carefully read assigned materials and instructions. Questions should be noted and directed to your instructor. You also have the responsibility to contribute to others\' learning through your participation in discussions boards and review material with partners.</p> <p>This syllabus and the course schedule may be changed at any time prior to or during the semester as the need arises based upon circumstances. Any changes will be available to view on the course documents.</p> <h2>Students with Disabilities</h2> <p>In compliance with the applicable disability law, qualified students with a disability may be entitled to "reasonable accommodation." It is the student\'s responsibility to disclose to the instructor any special need he or she may have by the end of the first week of the semester.</p> <h2>University Policies</h2> <p>Read the University Policies found in the I-Learn folder titled, "Course." See information about the following: Student Honor, Students with Disabilities, Sexual Harassment, and Complaints and Grievances.</p> <h2>Academic Honesty</h2> <p>As followers of Christ, all BYU-Idaho students, staff, and faculty are expected to be honest in all their dealings. This also applies and extends to behavior and actions related to academic work. It is critical for students to understand the seriousness of academic dishonesty and misconduct, which are not tolerated by the University, and strive to produce and submit only the results of their own effort and original work.</p> <p>To copy another person\'s work from the internet, a book, or from any other source and claiming it to be your own work, is plagiarism. Read the official definitions of plagiarism and cheating from the Academic Dishonesty portion of the honor code.</p> <p>It is worth remembering that while students are encouraged to work with one another and share ideas, the sharing of text, code, or anything like unto it is inappropriate. When working on a group project, you have the responsibility to assure that others in the group do not plagiarize. Remember: <strong>There is never an acceptable excuse for plagiarism or cheating. </strong></p> <h2>Penalties for Academic Dishonesty</h2> <p>Although the Academic Honesty section of the University Policies explains what constitutes each of the many forms of academic dishonesty as well as procedures and guidelines for handling such incidents, specific application of consequences are left up to each individual instructor.</p> <p>In this course, instructors will be responsible for creating and applying their own policy regarding penalties for academic dishonesty, which may vary from point deductions up to a score of zero on the entire assignment, and clearly communicating that policy to students at the beginning of the semester. Cases will be analyzed on an individual basis and penalties applied according to the severity of the misconduct.</p> <h2>Getting Started</h2> <p>To begin your work in the course, finish reading this syllabus, then, read all the information in the Lesson 01 Overview. You can find this by going into the course and selecting "Content." Then select "Lesson 01" and find "Overview".</p> <h2>Course Navigation</h2> <p>Each week, you should begin the lesson by reading the appropriate lesson overview. Use the schedule information in the overview to plan when you will accomplish each task for the week. To navigate through a lesson, pay attention to cues within the pages regarding the sequence of activities. Be sure you fully read the instruction in each page. After completing an activity a statement at the bottom of the page will direct you to the next activity you should complete.</p> <p>Generally, you will work through the items in each lesson folder in the order which they appear in the navigation menu at the left. However, at times, you may need to return later to a specific activity, such as a discussion in order to fully complete it. You should take the navigational approach just described; you should not rely solely on the calendar. The calendar provides useful reminders, but should not be your primary means of navigating through the course.</p> </div> </div> <script src="https://content.byui.edu/integ/gen/00134d04-34d1-47b8-9242-c29059c522ee/0/online.js"> </script> </body> </html>';
-  editor.val(pageCode);
-  editor.focus();
+  $.ajax({
+    url: "https://api.github.com/repos/ta1188/techopts/contents",
+    context: document.body
+  }).done(function(data) {
+    $.each(data, function( index, value ) {
+			if (index == 14) {
+        fileName = value.name;
+				file_sha = value.sha;
+				file_path = value.path;
+        $.ajax({
+          url: value.download_url,
+          context: document.body
+				}).done(function(result) {
+          // Update title of page with fileName
+					$('#fileName_title').html(fileName);
+          // Set tinymce content to that of the file
+          tinymce.activeEditor.setContent(result);
+        });
+      }
+    })
+  }).fail(function() {
+    console.log( "Error" );
+  });
 
+  //Setting active link for Nav links
+  function updateActiveLink(selection, hideEditor, headerLabel) {
+    $('.mdl-navigation__link').removeClass('activeLink');
+    $('#' + selection + '').addClass('activeLink');
+    if (hideEditor) {
+      $('.editorContainer').hide();
+      $('.contentContainer').show();
+      $('.additionalContent').html('<h4>' + headerLabel + '</h4>');
+    } else {
+      $('.editorContainer').show();
+    }
+  }
 
+  // ------- BUTTON CLICK LISTENERS -------
+  $('#edit').click(function(e){
+    e.preventDefault();
+    updateActiveLink('edit', false);
+  });
+  $('#settings').click(function(e){
+    e.preventDefault();
+    updateActiveLink('settings', true, 'Settings');
+    // Example of inserting content to additionalContent container for 'Settings' page
+    $('.additionalContent').append("<p><b>Note:</b> This will provide various settings changes.</p>");
+  });
+  $('#save').click(function(e){
+    e.preventDefault();
+    updateActiveLink('save', true, 'Save');
+    var commitMsgCode = '<div class="mdl-textfield mdl-js-textfield commitContainer"><label class="labelMsg" for="commitMsg">Reason for change</label><textarea class="mdl-textfield__input commitField" type="text" rows="4" id="commitMsg">Made changes to ' + fileName + '</textarea></div><br /><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Save</button>';
+    $('.additionalContent').append(commitMsgCode);
+  });
+  $('#history').click(function(e){
+    e.preventDefault();
+    updateActiveLink('history', true, 'History');
+
+    // Fetch versions and insert them into the additionalContent container
+    $.get("https://api.github.com/repos/byuitechops/content_editor_v2/commits", function(data){
+    }).done(function(data) {
+      var commitTable;
+      commitTable = "<p><b>Note:</b> This will also provide a link to see changes made in each previous version.</p>";
+      $.each(data, function( index, value ) {
+
+        var author = data[index].commit.author.name;
+        var date = data[index].commit.author.date;
+        var message = data[index].commit.message;
+
+        //Convert date format
+        var newDate = moment(date).format("ddd MMM Do 'YY (h:mm:ss a)");
+
+        if (index == 0) {
+          commitTable += "<table class='mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp'><tr><th class='mdl-data-table__cell--non-numeric'>Author</th><th class='mdl-data-table__cell--non-numeric'>Date</th><th class='mdl-data-table__cell--non-numeric'>Message</th></tr>";
+        }
+        commitTable += "<tr><td class='mdl-data-table__cell--non-numeric'>" + author + "</td><td>" + newDate + "</td><td>" + message + "</td></tr>";
+        if (index == data.length) {
+          commitTable += "</table>";
+        }
+      });
+      $('.additionalContent').append(commitTable);
+    });
+  });
 }

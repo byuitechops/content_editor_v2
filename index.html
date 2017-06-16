@@ -15,6 +15,9 @@
     <script src="scripts/tinymce/tinymce.min.js"></script>
     <script src="scripts/tinymce/jquery.tinymce.min.js"></script>
 
+    <!-- Bring in Moment Scripts -->
+    <script src="scripts/moment.min.js"></script>
+
     <!-- Link Local Stylesheet and JS -->
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="stylesheet" type="text/css" href="styles/material.min.css">
@@ -26,14 +29,15 @@
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <!-- Title -->
-        <span id="fileName_title" class="mdl-layout-title">(File Name)</span>
+        <span id="fileName_title" class="mdl-layout-title"></span>
         <!-- Add spacer, to align navigation to the right -->
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
         <nav class="mdl-navigation mdl-layout--fixed-header">
-          <a class="mdl-navigation__link" href=""><i class="material-icons">history</i></a>
-          <a class="mdl-navigation__link" href=""><i class="material-icons">settings</i></a>
-          <a class="mdl-navigation__link" href=""><i id="saveBtn" class="material-icons mdl-badge mdl-badge--overlap">save</i></a>
+          <a id="edit" class="mdl-navigation__link activeLink" href=""><i class="material-icons">mode_edit</i></a>
+          <a id="history" class="mdl-navigation__link" href=""><i class="material-icons">history</i></a>
+          <a id="settings" class="mdl-navigation__link" href=""><i class="material-icons">settings</i></a>
+          <a id="save" class="mdl-navigation__link" href=""><i class="material-icons mdl-badge mdl-badge--overlap saveBtn">save</i></a>
         </nav>
       </div>
     </header>
@@ -42,6 +46,9 @@
         <div class="editorContainer mdl-shadow--2dp">
           <textarea id="initial_textarea"></textarea>
         </div>
+      </div>
+      <div class="page-content contentContainer">
+        <div class="additionalContent mdl-shadow--2dp"></div>
       </div>
     </main>
   </div>

@@ -1,9 +1,9 @@
-.editorContainer {
+.editorContainer, .contentContainer {
   margin: 2rem 1rem;
   min-height: 10rem;
 }
 .saveWarning {
-  color: #fff176;
+  color: #ffccbc;
 }
 .saveWarning::after {
   background: #ff8a65;
@@ -13,4 +13,29 @@
 #main {
   width: 100% !important;
   margin: 0 !important;
+}
+.contentContainer {
+  display: none;
+}
+.additionalContent {
+  padding: 5px 10px;
+  min-height: 5rem;
+}
+.additionalContent h4 {
+  margin: 0;
+  padding: 0;
+}
+.additionalContent p {
+  margin: 1rem;
+}
+.labelMsg {
+  font-style: italic;
+  color: #bdbdbd;
+}
+.commitContainer {
+  width: 100% !important;
+}
+.commitField {
+  outline: none;
+  color: #757575 !important;
 }
