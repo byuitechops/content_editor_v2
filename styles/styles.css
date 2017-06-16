@@ -16,6 +16,7 @@
 }
 .contentContainer {
   display: none;
+  font-family: 'PT Sans', sans-serif;
 }
 .additionalContent {
   padding: 5px 10px;
