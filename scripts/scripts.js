@@ -88,6 +88,7 @@ window.onload = function() {
       $('.contentContainer').show();
       $('.additionalContent').html('<h4>' + headerLabel + '</h4>');
     } else {
+      $('.contentContainer').hide();
       $('.editorContainer').show();
     }
   }
