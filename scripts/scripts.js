@@ -3,6 +3,7 @@ window.onload = function() {
   var file_sha;
   var file_path;
   var bodyHtml;
+  var lti_user_private_key;
 
   var editor = $('#initial_textarea');
 
@@ -22,19 +23,19 @@ window.onload = function() {
           $('.saveBtn').attr('data-badge', '!');
         }
       });
-      editor.on('init', function(editor) {
-        console.log(tinymce.UndoManager);
-        tinymce.onUndo(function(e) {
-        // tinymce.UndoManager.hasUndo(function(e) {
-          console.log("undo-ed");
-          var clean = $('#mceu_0').hasClass('mce-disabled');
-          if(clean) {
-            console.log("clearing");
-            $('.saveBtn').removeClass('saveWarning');
-            $('.saveBtn').attr('');
-          }
-        });
-      });
+      // editor.on('init', function(editor) {
+      //   console.log(tinymce.UndoManager);
+      //   tinymce.onUndo(function(e) {
+      //   // tinymce.UndoManager.hasUndo(function(e) {
+      //     console.log("undo-ed");
+      //     var clean = $('#mceu_0').hasClass('mce-disabled');
+      //     if(clean) {
+      //       console.log("clearing");
+      //       $('.saveBtn').removeClass('saveWarning');
+      //       $('.saveBtn').attr('');
+      //     }
+      //   });
+      // });
     },
     isNotDirty: true,
     height : "50rem",
@@ -54,27 +55,26 @@ window.onload = function() {
   ]
   });
 
+  // Should likely get file name from LTI...
+  fileName = 'contents_demo.html';
   //Fetch data from GitHub
   $.ajax({
-    url: "https://api.github.com/repos/ta1188/techopts/contents",
+    url: "https://api.github.com/repos/byuitechops/content_editor_v2/contents/" + fileName,
     context: document.body
-  }).done(function(data) {
-    $.each(data, function( index, value ) {
-			if (index == 14) {
-        fileName = value.name;
-				file_sha = value.sha;
-				file_path = value.path;
-        $.ajax({
-          url: value.download_url,
-          context: document.body
-				}).done(function(result) {
-          // Update title of page with fileName
-					$('#fileName_title').html(fileName);
-          // Set tinymce content to that of the file
-          tinymce.activeEditor.setContent(result);
-        });
-      }
-    })
+  }).done(function(value) {
+    console.log('data', value);
+    fileName = value.name;
+		file_sha = value.sha;
+		file_path = value.path;
+    $.ajax({
+      url: value.download_url,
+      context: document.body
+		}).done(function(result) {
+      // Update title of page with fileName
+			$('#fileName_title').html(fileName);
+      // Set tinymce content to that of the file
+      tinymce.activeEditor.setContent(result);
+    });
   }).fail(function() {
     console.log( "Error" );
   });
@@ -93,6 +93,49 @@ window.onload = function() {
     }
   }
 
+  function showToast(successful) {
+    if (successful){
+      $('#toastMsg').text("Successfully saved");
+    }else{
+      $('#toastMsg').text("Error saving file");
+    }
+    $('#demo-toast').show();
+    setTimeout(function(){
+      $('#demo-toast').hide();
+      $('#toastMsg').innerHTML = '';
+    }, 1500);
+  }
+
+  function commitChanges(e) {
+    // When implementing LTI piece you can have the user's private key assigned here:
+      // NOTE: This is the Base-64 version of the user's private key
+      // You MUST Base-64 encode the one obtained via the LTI, you can use 'btoa([private key to encode])'
+    lti_user_private_key = 'Y2Ntcy1kZW1vOmVjYTZkYzVkNmRlNmYwMDc2MWFjOGJkZjAwMTE2NTA4M2RhNjMxZjE=';
+    var encoded_file_content = btoa(tinymce.activeEditor.getContent());
+    var commitMsg = $('#commitMsg').val();
+
+    // AJAX data must be a JSON string, so assigning to a variable to take care of that later
+    var data = {"path": file_path, "sha": file_sha, "message": commitMsg, "content": encoded_file_content};
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://api.github.com/repos/byuitechops/content_editor_v2/contents/" + file_path,
+      "method": "PUT",
+      "headers": { "authorization": "Basic " + lti_user_private_key},
+      "data": JSON.stringify(data)
+    }
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    }).fail(function(error){
+      showToast(false);
+      console.log("Commiting File Failed: ", error.responseJSON);
+    }).done(function(result) {
+
+      console.log('Successfully Commited: ', result);
+      showToast(true);
+    });
+  }
   // ------- BUTTON CLICK LISTENERS -------
   $('#edit').click(function(e){
     e.preventDefault();
@@ -107,8 +150,9 @@ window.onload = function() {
   $('#save').click(function(e){
     e.preventDefault();
     updateActiveLink('save', true, 'Save');
-    var commitMsgCode = '<div class="mdl-textfield mdl-js-textfield commitContainer"><label class="labelMsg" for="commitMsg">Reason for change</label><textarea class="mdl-textfield__input commitField" type="text" rows="4" id="commitMsg">Made changes to ' + fileName + '</textarea></div><br /><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Save</button>';
+    var commitMsgCode = '<div class="mdl-textfield mdl-js-textfield commitContainer"><label class="labelMsg" for="commitMsg">Reason for change</label><textarea class="mdl-textfield__input commitField" type="text" rows="4" id="commitMsg">Made changes to ' + fileName + '</textarea></div><br /><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="commitSave">Save</button>';
     $('.additionalContent').append(commitMsgCode);
+    $('#commitSave').on('click', commitChanges);
   });
   $('#history').click(function(e){
     e.preventDefault();

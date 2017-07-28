@@ -46,3 +46,17 @@
 .versionTable {
   margin-bottom: 1rem;
 }
+
+.customToast {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 30%;
+  color: white;
+  padding: 1rem;
+  z-index: 1000;
+  min-width: 288px;
+  max-width: 568px;
+  background-color: #323232;
+  transition: transform .25s cubic-bezier(.4, 0, 1, 1), -webkit-transform .25s cubic-bezier(.4, 0, 1, 1);
+}
