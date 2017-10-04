@@ -1,364 +1,182 @@
-<!DOCTYPE html><html>
-<head>
-    <title>CAS &#8211; Central Authentication Service</title>
-    <meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="description" content="Brigham Young University - Idaho"><meta name="author" content="Brigham Young University - Idaho"><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/><link rel="stylesheet" href=""/><link rel="stylesheet" href="/cas/css/global.min.css"/><link rel="stylesheet" href="/cas/css/custom.css"/><link rel="icon" href="/cas/favicon.ico" type="image/x-icon"/><script>
-        /*<![CDATA[*/
-        
-        var trackGeoLocation = false;
-        
-        /*]]>*/
-    </script>
-
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.3.0/zxcvbn.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-</head>
-<body id="cas" class="login">
-    <header role="banner" class="global-header">
-        <nav role="navigation" class="site-navigation navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".site-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse site-navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li class="dropdown">
-                            <a href="#administrative" class="dropdown-toggle" data-toggle="dropdown">
-                                University <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="http://www.byui.edu/admissions">Apply</a></li>
-                                <li><a href="http://www.byui.edu/about/">About BYUI</a></li>
-                                <li><a href="http://www.byui.edu/contact-us/">Contact</a></li>
-                                <li><a href="http://www.byui.edu/financial-aid/">Financial Aid</a></li>
-                                <li><a href="http://www.byui.edu/student-support/ask-byui">Information Desk</a></li>
-                                <li><a href="http://www.byui.edu/president">President's Office</a></li>
-                                <li><a href="http://www.byui.edu/student-records/">Registration</a></li>
-                                <li><a href="http://www.byui.edu/university-relations">University Relations</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#academic" class="dropdown-toggle" data-toggle="dropdown">
-                                Academics <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="http://www.byui.edu/student-records/academic-deadlines">Academic Schedule</a></li>
-                                <li><a href="http://www.byui.edu/academic-discovery-center">Advising</a></li>
-                                <li><a href="http://www.byui.edu/directories/colleges-and-departments">Colleges and Departments</a></li>
-                                <li><a href="http://www.byui.edu/catalog/">Course Catalog</a></li>
-                                <li><a href="http://www.byui.edu/about/defining-aspects/learning-model">Learning Model</a></li>
-                                <li><a href="http://www.byui.edu/testing-services">Testing Center</a></li>
-                                <li><a href="http://www.byui.edu/academic-support-centers/tutoring-center">Tutoring</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#student-life" class="dropdown-toggle" data-toggle="dropdown">
-                                Living <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="http://www.byui.edu/activities">Activities</a></li>
-                                <li><a href="http://www.byui.edu/food-services/">Food</a></li>
-                                <li><a href="http://www.byui.edu/activities/get-involved">Get Involved</a></li>
-                                <li><a href="http://www.byui.edu/health-center">Health and Wellness</a></li>
-                                <li><a href="http://www.byui.edu/student-honor-office">Honor Code</a></li>
-                                <li><a href="http://www.byui.edu/housing/">Housing</a></li>
-                                <li><a href="http://www.byui.edu/human-resources/employment-opportunities/student-employment">Student Employment</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#services" class="dropdown-toggle" data-toggle="dropdown">
-                                Services <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="http://www.byui.edu/ask/live-chat/?cid=hli:109">Ask BYUI</a></li>
-                                <li><a href="http://www.byui.edu/disabilities/">Disability Services</a></li>
-                                <li><a href="http://www.byui.edu/international-services">International Services</a></li>
-                                <li><a href="http://www.lib.byui.edu/">Library</a></li>
-                                <li><a href="http://www.byui.edu/university-operations/security-and-safety/parking-services">Parking</a></li>
-                                <li><a href="http://www.byui.edu/university-operations/security-and-safety">Security</a></li>
-                                <li><a href="http://www.byui.edu/information-technology">Technical Help</a></li>
-                                <li><a href="http://www.byuistore.com/">University Store</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#find" class="dropdown-toggle" data-toggle="dropdown">
-                                Find <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="http://www.byui.edu/directories/">A-Z Directory</a></li>
-                                <li><a href="https://web.byui.edu/BulletinBoard">Bulletin Board</a></li>
-                                <li><a href="http://calendar.byui.edu/">Calendar</a></li>
-                                <li><a href="http://www.byui.edu/maps">Map</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form method="get" action="http://search.byui.edu/search?" _lpchecked="1" role="search" class="navbar-form form-horizontal container visible-xs">
-                        <div class="search input-group">
-                            <input type="text" class="form-control" name="q" placeholder="Search" alt="Search the BYU-I website" /><span class="input-group-btn">
-                                    <button type="submit" class="btn btn-success">
-                                        <span aria-hidden="true" class="icon icon-magnifying-glass"></span>
-                                        <span class="sr-only">Go</span>
-                                    </button>
-                                </span>
-                            <input type="hidden" name="site" value="default_collection" /><input type="hidden" name="client" value="byui_frontend" /><input type="hidden" name="output" value="xml_no_dtd" /><input type="hidden" name="proxystylesheet" value="byui_frontend" /><input type="hidden" name="proxyreload" value="0" /></div>
-                    </form>
-                </div><!--/.navbar-collapse -->
-            </div><!--/.container -->
-        </nav>
-
-        <div class="site-banner">
-            <div class="container">
-                <a id="loginSiteLogo" class="site-logo navbar-brand" href="http://www.byui.edu" title="BYU-Idaho">
-                        <span aria-hidden="true" class="icon icon-byui-logo">
-                            <span class="sr-only">BYU-Idaho</span>
-                        </span>
-                </a>
-                <div id="loginSiteTitle" class="site-title">
-                    Brigham Young University-Idaho
-                </div>
-                <form method="get" action="http://search.byui.edu/search?" _lpchecked="1" role="search" class="desktop-search form-horizontal container hidden-xs hidden-sm row">
-                    <div class="search input-group">
-                        <input type="text" class="form-control" name="q" placeholder="Search" alt="Search the BYU-I website" /><span class="input-group-btn">
-                                <button type="submit" class="btn btn-success">
-                                    <span aria-hidden="true" class="icon icon-magnifying-glass"></span>
-                                    <span class="sr-only">Go</span>
-                                </button>
-                            </span>
-                        <input type="hidden" name="site" value="default_collection" /><input type="hidden" name="client" value="byui_frontend" /><input type="hidden" name="output" value="xml_no_dtd" /><input type="hidden" name="proxystylesheet" value="byui_frontend" /><input type="hidden" name="proxyreload" value="0" /></div>
-                </form>
-            </div>
-        </div>
-    </header>
-    <main role="main" class="site-content container">
-        <div id="page-content" class="col-lg-10 col-lg-offset-1 col-xl-8 col-xl-offset-2 row" data-ng-app="app">
-        <div class="row">
-            <div id="cookiesDisabled" class="alert alert-info" style="display:none;">
-    <h2>Browser cookies disabled</h2>
-    <p>Your browser does not accept cookies. Single Sign On WILL NOT WORK.</p>
+<p>CAS &ndash; Central Authentication Service</p>
+<header class="global-header" role="banner"><nav class="site-navigation navbar navbar-inverse" role="navigation">
+<div class="container">
+<div class="navbar-header"><button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".site-navbar-collapse"> <span class="sr-only">Toggle Navigation</span> </button></div>
+<div class="navbar-collapse site-navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-left">
+<li class="dropdown"><a class="dropdown-toggle" href="#administrative" data-toggle="dropdown"> University </a>
+<ul class="dropdown-menu">
+<li><a href="http://www.byui.edu/admissions">Apply</a></li>
+<li><a href="http://www.byui.edu/about/">About BYUI</a></li>
+<li><a href="http://www.byui.edu/contact-us/">Contact</a></li>
+<li><a href="http://www.byui.edu/financial-aid/">Financial Aid</a></li>
+<li><a href="http://www.byui.edu/student-support/ask-byui">Information Desk</a></li>
+<li><a href="http://www.byui.edu/president">President's Office</a></li>
+<li><a href="http://www.byui.edu/student-records/">Registration</a></li>
+<li><a href="http://www.byui.edu/university-relations">University Relations</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" href="#academic" data-toggle="dropdown"> Academics </a>
+<ul class="dropdown-menu">
+<li><a href="http://www.byui.edu/student-records/academic-deadlines">Academic Schedule</a></li>
+<li><a href="http://www.byui.edu/academic-discovery-center">Advising</a></li>
+<li><a href="http://www.byui.edu/directories/colleges-and-departments">Colleges and Departments</a></li>
+<li><a href="http://www.byui.edu/catalog/">Course Catalog</a></li>
+<li><a href="http://www.byui.edu/about/defining-aspects/learning-model">Learning Model</a></li>
+<li><a href="http://www.byui.edu/testing-services">Testing Center</a></li>
+<li><a href="http://www.byui.edu/academic-support-centers/tutoring-center">Tutoring</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" href="#student-life" data-toggle="dropdown"> Living </a>
+<ul class="dropdown-menu">
+<li><a href="http://www.byui.edu/activities">Activities</a></li>
+<li><a href="http://www.byui.edu/food-services/">Food</a></li>
+<li><a href="http://www.byui.edu/activities/get-involved">Get Involved</a></li>
+<li><a href="http://www.byui.edu/health-center">Health and Wellness</a></li>
+<li><a href="http://www.byui.edu/student-honor-office">Honor Code</a></li>
+<li><a href="http://www.byui.edu/housing/">Housing</a></li>
+<li><a href="http://www.byui.edu/human-resources/employment-opportunities/student-employment">Student Employment</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" href="#services" data-toggle="dropdown"> Services </a>
+<ul class="dropdown-menu">
+<li><a href="http://www.byui.edu/ask/live-chat/?cid=hli:109">Ask BYUI</a></li>
+<li><a href="http://www.byui.edu/disabilities/">Disability Services</a></li>
+<li><a href="http://www.byui.edu/international-services">International Services</a></li>
+<li><a href="http://www.lib.byui.edu/">Library</a></li>
+<li><a href="http://www.byui.edu/university-operations/security-and-safety/parking-services">Parking</a></li>
+<li><a href="http://www.byui.edu/university-operations/security-and-safety">Security</a></li>
+<li><a href="http://www.byui.edu/information-technology">Technical Help</a></li>
+<li><a href="http://www.byuistore.com/">University Store</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" href="#find" data-toggle="dropdown"> Find </a>
+<ul class="dropdown-menu">
+<li><a href="http://www.byui.edu/directories/">A-Z Directory</a></li>
+<li><a href="https://web.byui.edu/BulletinBoard">Bulletin Board</a></li>
+<li><a href="http://calendar.byui.edu/">Calendar</a></li>
+<li><a href="http://www.byui.edu/maps">Map</a></li>
+</ul>
+</li>
+</ul>
+<form class="navbar-form form-horizontal container visible-xs" role="search" action="http://search.byui.edu/search?" method="get">
+<div class="search input-group"><input class="form-control" alt="Search the BYU-I website" name="q" type="text" placeholder="Search" /><span class="input-group-btn"> <button class="btn btn-success" type="submit"> <span class="sr-only">Go</span> </button> </span> <input name="site" type="hidden" value="default_collection" /><input name="client" type="hidden" value="byui_frontend" /><input name="output" type="hidden" value="xml_no_dtd" /><input name="proxystylesheet" type="hidden" value="byui_frontend" /><input name="proxyreload" type="hidden" value="0" /></div>
+</form></div>
+<!--/.navbar-collapse --></div>
+<!--/.container --></nav>
+<div class="site-banner">
+<div class="container"><a id="loginSiteLogo" class="site-logo navbar-brand" title="BYU-Idaho" href="http://www.byui.edu"> <span class="icon icon-byui-logo" aria-hidden="true"> <span class="sr-only">BYU-Idaho</span> </span> </a>
+<div id="loginSiteTitle" class="site-title">Brigham Young University-Idaho</div>
+<form class="desktop-search form-horizontal container hidden-xs hidden-sm row" role="search" action="http://search.byui.edu/search?" method="get">
+<div class="search input-group"><input class="form-control" alt="Search the BYU-I website" name="q" type="text" placeholder="Search" /><span class="input-group-btn"> <button class="btn btn-success" type="submit"> <span class="sr-only">Go</span> </button> </span> <input name="site" type="hidden" value="default_collection" /><input name="client" type="hidden" value="byui_frontend" /><input name="output" type="hidden" value="xml_no_dtd" /><input name="proxystylesheet" type="hidden" value="byui_frontend" /><input name="proxyreload" type="hidden" value="0" /></div>
+</form></div>
 </div>
-<div class="box" id="login">
-    <form method="post" id="fm1" Class="fm-v clearfix" htmlEscape="true" onsubmit="return prepareSubmit(this);">
-        <div id="wrapperBox">
-            <div id="box">
-                <section class="row">
-                    <label for="username"><span class="accesskey">U</span>sername:</label>
-
-                    <div>
-                        <input class="required loginRequired"
-                               id="username"
-                               size="25"
-                               tabindex="1"
-                               type="text"
-                               htmlEscape="true"
-                               accesskey="u"
-                               autocomplete="off" name="username" value=""/></div>
-                </section>
-
-                <section class="row">
-                    <label for="password"><span class="accesskey">P</span>assword:</label>
-
-                    <div>
-                        <input class="required loginRequired"
-                               type="password"
-                               id="password"
-                               size="25"
-                               tabindex="2"
-                               htmlEscape="true"
-                               accesskey="p"
-                               autocomplete="off" name="password" value=""/><span id="capslock-on" style="display:none;">
-                            <p>
-                                <i class="fa fa-exclamation-circle"></i>
-                                <span>CAPSLOCK key is turned on!</span>
-                            </p>
-                        </span>
-                    </div>
-                </section>
-                <section class="row check">
-                    </section>
-
-                <section class="row btn-row">
-                    <input type="hidden" name="execution" value="3d3b2413-4a58-401d-b780-82e738e4ca67_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU1RkTk1uUkdTMHBRY2xsa1dWWlZTMUZWVGpsbFNrcHNhVTVvVkc5UFduY3diM2QxUld0VE1UZHRRMm80Um05TVVVVlNaR2x5WjFSQk5ESnFWSEUwTkhjclJqZE1hWE5DZEc1V1F6TnlZM0pGWVd4R1pYaFllVFZtWlRVd1IweDZPSEI2WmtOQk9GbFlkSEJDVW10MlJGQlRiVGR6TmtkNVRGbE1WSEJzWVUxWE1XZHZVamw0UTJ4b1FsaDNOR1EwTDFneGFFUk5PR2x4VUhGc01VdDNORWx1ZG04dmRESndaMjVoVEdseVZtOUdTVWQwY1ZKNVMzWmFOMWhhYjAxM1dUTkJjWE40UkdreVkwMHpZbGx2V2xOU1pGWTRXRTgyTjNVNVVrZHVWRzQ1Y2tWbWN6bFlkak5XZDNsTVJreFlTR2xUZEVoTFpsTXJlVzlsUWpWUk1tZGpiV1pHTDAxTmQwUktSRzVsUW5Ob2FXRTVhMkpGTW0xT1NWWlRkV2RzV0RZelEzZDBhaTg1ZGxWcWMwZFJkM3BYWm1oWk9XeDRlbloyZVRodGIwTTNXWHBoZGpKb05FeEdUR0ZIZGxSMVRVRklSV2wzVHpVNE9YTllRbEF5YkhSWmVXUmhSM0ZxVEZoUlNUTjBWelJLVUdWRlprUXdWbFUyTjJObGRGQjRiMjh3TW00cmVqVXdlVmhqUjIxaGVGaE9lRUZxUjFaaVREVjVhR2RTU0VnM1RrSnhOVTVhVFRONmFGVlBjR3B3WW05VU9VeHFRMWQxU2pCcVkwMDBhRkJ6Vld0TFREWklWV1pUTVVwQmNHWmhSVVV3VWtsU1NXSTRXVUlyT0U5dlUzQTJTbTlJZFhSYWRtSlhaM1pHUlhscFRUSk1WbmxvVlVoMWJtTkhWa0VyVVVWNVUwVXJUeTkzTjNaWVZrUjNjVnBzYUVoMlVUVTNabkJHWlV0RVQyWnlMeXROUW5GclRXaEVla1J6VlVWSVJtTmhhRE1yU0VoaGExTm1PR2RwY1VSVU1Vb3diM1pNU0VKcVMzcHRhM2gyTjJWeGVtcFRSbUpCVldoWGFWSnZlR0pLWVUxRk1XUkZiMEpvWkVNdmFFbDRUWGMyU0ZRNFNtZG9ZWE51WkhaMmNHdDFXbkJEUTBFNUswRkVRaTgwZWpoVloyRkhVSG9yZEVKNVRYaG9lRzlFUkU1dmNtZGtTRlZYUmxCeWJWaFBiM2RzVEhVeGFFWlZORmhxU1ZOeGN6Qm5ObXBSYlRWWE9EUnRTVEpaWVV4ek56aGtkRVpMV2tKdVNua3laemhtVjJoNVJHZG1jbWt5Tm5kbGJWUkxhRWR3TlhWR2IzbDVUMmd6YVdaMlkwVXZWRFpQTlVwT1NteHpUelZ3TTFkNFNERjVkV3BCVTNKVFVHMVhNM0lyYUVKWVIyeFhla2M1V25oV1NHZGFZVVpxTTJaSlMxbDJWRTFaV2xvemEzTmphR3h2UW1oSWRGTlRXVW8zYm13eWN6RnFZMFp1ZUVOeE9ETlRRWEV4VjJjeWIzZFZRbmRUU1ZKb1dFbHFPWGM0ZWtoV01EQkRNMWhSV2tKdWFVVndXWEZhVTBaUWRtZ3lVWEowWjJOWWNETmtXR2hsZG5aQ1J5ODBkVGR6ZFcxMU0wNTZaMWRDZW1sdVYyNHlkSGRsUzBFMmJrbHZSRlF5VW5sUk5FbFBia3AyT1VSdFpVbG5aVmh5WTBWU1VXOW9PVEJVVlRjdmFreGxUVEJDVFVKek5EZHNVekphZVZRelkxUkNVMEp1WVUxdU9XWXdVbXhMTWtsT1FuQllORWgxU2pOQ2J6ZHNTbVJIZGpCclVrSm9lVUZRUW10REsxZENXSGQzUWt3eEsyOHpaRTgyUkhJM1FtRnlUa3BxWm1GSWJEbHZiRUZLTjNoM2N6RlBVVWQ2ZFhaQ2FVVkZhVkZRTUU1cE1VRjVPRXRJUTJoc2NtNTFaMHRTWkhOMVJETndXVXBOT0U0d1JpOTVURGRrZUhwa1VqRnpZalExUTJRMFpqZG1NMHBSTUVaMFFsWkxhRVJQYTBkSlkzRkpkbGw1Um1Wdk4yMDNkamt6WTBsMWIxSlVXV3hEUkVjMmIzY3paa3hsYlZGbFkwcFhjVE5QZFRKcVFWSnhSa3ByU0ZCR1dtbFBTRlV6WWxsQ01ubHRkelpLYUhObmRsVnVhVVJYWW1SeFpUazNiRWxZY0ZkdFNsaHRSbVEzWTNGQ01GQmhlbGxxTjJRcmJXTXpUVEZrU21sbVozbG5abWh6VFRkQ1ZrbDFlVFpVUTJSbmVFdDVhMkZaU1RCQ1JFeHZSbXhWVFZNMFpsQTRTV1owVmtKWFFtbHVSVmRoTWpGQ2VXUlNabWd4Wkc1alRreDFTREpUVGtwRmFsQllaRVZXUVZoYVFtTk9VMmhvWkVjNFVHMVBWVGRLVDBReWMwWTJWMFpuU0hKSFNYbG1ibUZaWXpoaVZqbFBVMlV6TnpFeWNVMXNiV0pFT0VodFJUUjBRV3hWVkU5a1puVnZXa1JRVTFkUmFtZHlXV2RpWm1SelN5OHhlVlZ0ZW1rd05EaHlXa1F4VEc5a2NIWjJibVo0VFZGcVZHTTJPRk1yVDB3eWF6VXhlbGxIVDA0M1EwcExSVEZvY1c1TU5ubHJabEpSYzBKQlducEtaR1kyZUhSelIxcHdZVEZyTVVSWloxQnVNbmxWZURGVlJEaE5NVE5xYldneVdHUTBjMWd6VFRoWmJXeERVV0ZrVjFOcWFtWndSakZQY0hoMFJGaG9aMjF2V0c5a1NYaFlUbGRsTXpJMU5tOUpVWGt5Y1dKSlNVWlBOMnRYUlVzM00wMVRlak5HUzNWU2FtSmpaMWxDUjFVck4xbEtOVFk1YVRac1Qyc3lVRVJqU1RkTFV6WTNNams1YTBoeVlpOUthemd5YUcwNFpGaFRRV2R6Ymt4a05rRm1aREExT0dKUVZFcExNa2wySzA5MmIyMDFkbGxYVjNJNFoyRmtZbUpYYUd0cVJHNVpNelZrZFRaWFdFaFJSRWd6Wm1KUmFsSkZTRlpDT1Vsa1ZIQkJWR294VVU1WEwzbzNTMWR6UVhwc2JuZzNNa0ptVHpoTFkyazNkSEZZVlcxbVYzSkZLMlVyVkZST1NEbDFNVU5UYlU0NWVVUk9VbFpGUlRoR05HTTJiR0l6TlZSelVWaHJjVkpOTlhWa1JXdFFSV0V4YkRaS2N6TlBOSGRqUmxoTk1IcGxPRWh4U0RkR1RqVTJhazFpZUhkMGVWbGtSR3BoVmxacE5IRjFkMGMyZFc1aVpYUlFkRWhXWVdKcE9VSnVOVzlrV1RkUFZtMHhMekZWYUZoRE5VUXlSbVZyZVRNMldscFhTSGtyU1V4MVNYSk5VRTA0T0ZKWWFVTk5TRFJhUTIxdU56SXlOa3RhYVZST1lsVjBSalJ2WVhsQk5HdExOREU0ZEdwTFYyMDRRM293UkdSeFNFNU5URVZxUWpSUFUyOWxWVzVRVlRNclRFNXBhekk1TjJab1lqUkNSMjVSV2psTU1rUnNXa2hWV1RsV0syMUpUREpQTW5BeVkwZGhPVmhUUjBOdmVGVXdhbkZZTm5Vdk1WSXZNMGhoYTFOM1pFMUljMlJ2VTJvMVN6TnpiSEJZU1dKalRtdG1OeTlVTWtSa2MybERjVVpSV0ZkcVkxaEViV1JXZEZONE4xSmhjVGRIY0ZjNFNFZHJWMWx5VTNKak9XWk1ZbWR0UW1KS04zVnBiM0ZQUVdSelVWRlNOVkZ0Y0dRclkxVllSRUYxY0hnemJsTllVVmcyWjJsVWFUaGllakpSZGs1SEwzcFlaRXhMTUVkWVZqaFBRbkZqTUdsNmFDODFWVnBvV0hCclFqWnNhMVJaYVcxa1lWRk9NUzlUYzFwRmJuVlBZV1pRYmpKaE5GVTBMMnhHYTJSMVJVdEhWRE5FZUhNM056UlNWbk00ZEdGaGNWbzBWVXBCTnprdmVub3JiMmxaVDB3eVEwcGxORFpvU21kR00zQnJSazFpTlV4eGIwdFJNMUpNU0dKSk1VdGlkekIyZVZORGJtdExjMGRQVWt0NGFXRjFka2wwUzJaNWNsUkpha2wwTURjdlRVdE9jRXBGUlZBNUwwOTJhRzlhYzNWeVJFTm9WbXhuZFhOSk1FTXhhRE0yVkZoalZWTTFNVE5MZGtoTlF6Uk1VMk5GY2pkRFduVjJRemxpZHpORGNtWkJSMDVWUjFsa1p5OVRaMVJHVWtzdlVWZEVabU5QTldwNEswSm5lVWxsTTNsVmJFbGhNalJoYlVReGRYcDFRVWM1TlU1V2NGSTRiV1ZhUkZkUllqUTRiV0ZPTTFoVU5rc3phMlIyWkVkUFJWRktOV2t3U2xGeVRuUkliV3BUV1hSTVR6QjNiemRxUmxOMlRVdFBjM1kyV1VOSlVtRkZSbVl4YUZwMmJrc3hSM05zUm5ORlJXTm1jRzVSV0hGek5sbHlVa2RYVDNwSlkyb3pXa2h2UkdabVZsTkNRMGt5YVc5TFozSmxPSFoxU1V0T1Z6SmxNMFJ2YVcxTU9YYzNNU3R3U0dacFRXaE5WQzlRUVhsMmNGUnFPRTFSVDB4Q2FtdHdkWFZDY0VWNFJGSlBVbGRCVld0d1pHOXRTRE5TZEhJd09GQnNZMFZEYm1adVJtVlRRalpRVHpjdmJWQldaR0pxTTJOcFNtdHViM0kxVEVGS09URXZiR1EyVEc1dVZHeFZaMnB3T1M4MmJuQXZNV1JzVWpNeldEbE9WVUpYVUdSRVFsSjVja2cxVURWcFpXTkxjRWh5U1dsVlpucE9RemxzZEROcVpGQlZTMXBUY20xQ1FuaEdaSFZQYW1vd1FscGFjMmhOYTBoRFNsQTVNemN3TkdwWlpYWlhSRXBHYm5BNFIzRmtTREJ4ZFVoT2RFTlVTRk5UUm1SclJGcFliR0paZFdZNVltTldkRE5LVTB0NldqbE5XVzlMSzFWWk9IZDVhV0Y2WTA1a04wOVRRV2hLYW1GTlRXVnFabk5HWkdzM1FteEdVRFpxYzI1UFNIY3pNMlJOVlZkdGExbFVlakp5VnpkWGJXWk5VV0V2TkRCQ2FqbHJPRkJOWkZWdVdXc3dORFpHVmxBMmR6MDkucHY2SGFiM0l0bHJ2QjFqaks5b1dHQ2dsbU9UN29yRnVvcE8wRHp0czJNcmxXOXFBRGo1U2tvWDdLUFBJUURDaWpBWlI3akVJc2tiTEZiSTdKc1h3MEE="/><input type="hidden" name="_eventId" value="submit"/><input type="hidden" name="lt" value="" /><input type="hidden" name="geolocation"/><input class="btn-login"
-                           name="submit"
-                           accesskey="l"
-                           value="LOGIN"
-                           tabindex="6"
-                           type="submit"/></section>
-                <div id="Links" class="row">
-                    <a href="http://www.byui.edu/password">Change password</a> &nbsp; | &nbsp;
-                    <a href="https://web.byui.edu/Username/ForgotPassword.aspx">Forgot username or password</a> &nbsp; | &nbsp;
-                    <a href="https://web.byui.edu/Username/CreateUsername.aspx">Create username</a>
-                </div>
-            </div>
-        </div>
-
-        <div id="mobileHelp" class="row">
-            <a href="http://www.byui.edu/helpdesk">Need help logging in?</a>
-        </div>
-        <div id="noticeWrapper">
-            <div id="notice" >
-                <span style="font-weight:bold;">Notice:</span> Unauthorized access is strictly prohibited and may be subject to criminal prosecution.
-            </div>
-            <div id="closeBrowser" style="padding-top: 15px;">
-                <span style="font-weight:bold;">Exit Your Browser: </span>
-                To continue to protect the privacy of your information, you should exit the browser before leaving this device.
-            </div>
-        </div>
-    </form>
-    <!-- Move Cursor to name field --><script type="text/javascript">
-        $(document).ready(function() {
-            $("#username").focus();
-        });
-    </script>
+</header>
+<div id="page-content" class="col-lg-10 col-lg-offset-1 col-xl-8 col-xl-offset-2 row" data-ng-app="app">
+<div class="row">
+<div id="cookiesDisabled" class="alert alert-info" style="display: none;">
+<h2>Browser cookies disabled</h2>
+<p>Your browser does not accept cookies. Single Sign On WILL NOT WORK.</p>
+</div>
+<div id="login" class="box"><form id="fm1" class="fm-v clearfix" method="post">
+<div id="wrapperBox">
+<div id="box">
+<section class="row"><label for="username"><span class="accesskey">U</span>sername:</label>
+<div><input id="username" accesskey="u" class="required loginRequired" tabindex="1" autocomplete="off" name="username" size="25" type="text" value="" /></div>
+</section>
+<section class="row"><label for="password"><span class="accesskey">P</span>assword:</label>
+<div><input id="password" accesskey="p" class="required loginRequired" tabindex="2" autocomplete="off" name="password" size="25" type="password" value="" />
+<p>CAPSLOCK key is turned on!</p>
+</div>
+</section>
+<section class="row check"></section>
+<section class="row btn-row"><input name="execution" type="hidden" value="3d3b2413-4a58-401d-b780-82e738e4ca67_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuU1RkTk1uUkdTMHBRY2xsa1dWWlZTMUZWVGpsbFNrcHNhVTVvVkc5UFduY3diM2QxUld0VE1UZHRRMm80Um05TVVVVlNaR2x5WjFSQk5ESnFWSEUwTkhjclJqZE1hWE5DZEc1V1F6TnlZM0pGWVd4R1pYaFllVFZtWlRVd1IweDZPSEI2WmtOQk9GbFlkSEJDVW10MlJGQlRiVGR6TmtkNVRGbE1WSEJzWVUxWE1XZHZVamw0UTJ4b1FsaDNOR1EwTDFneGFFUk5PR2x4VUhGc01VdDNORWx1ZG04dmRESndaMjVoVEdseVZtOUdTVWQwY1ZKNVMzWmFOMWhhYjAxM1dUTkJjWE40UkdreVkwMHpZbGx2V2xOU1pGWTRXRTgyTjNVNVVrZHVWRzQ1Y2tWbWN6bFlkak5XZDNsTVJreFlTR2xUZEVoTFpsTXJlVzlsUWpWUk1tZGpiV1pHTDAxTmQwUktSRzVsUW5Ob2FXRTVhMkpGTW0xT1NWWlRkV2RzV0RZelEzZDBhaTg1ZGxWcWMwZFJkM3BYWm1oWk9XeDRlbloyZVRodGIwTTNXWHBoZGpKb05FeEdUR0ZIZGxSMVRVRklSV2wzVHpVNE9YTllRbEF5YkhSWmVXUmhSM0ZxVEZoUlNUTjBWelJLVUdWRlprUXdWbFUyTjJObGRGQjRiMjh3TW00cmVqVXdlVmhqUjIxaGVGaE9lRUZxUjFaaVREVjVhR2RTU0VnM1RrSnhOVTVhVFRONmFGVlBjR3B3WW05VU9VeHFRMWQxU2pCcVkwMDBhRkJ6Vld0TFREWklWV1pUTVVwQmNHWmhSVVV3VWtsU1NXSTRXVUlyT0U5dlUzQTJTbTlJZFhSYWRtSlhaM1pHUlhscFRUSk1WbmxvVlVoMWJtTkhWa0VyVVVWNVUwVXJUeTkzTjNaWVZrUjNjVnBzYUVoMlVUVTNabkJHWlV0RVQyWnlMeXROUW5GclRXaEVla1J6VlVWSVJtTmhhRE1yU0VoaGExTm1PR2RwY1VSVU1Vb3diM1pNU0VKcVMzcHRhM2gyTjJWeGVtcFRSbUpCVldoWGFWSnZlR0pLWVUxRk1XUkZiMEpvWkVNdmFFbDRUWGMyU0ZRNFNtZG9ZWE51WkhaMmNHdDFXbkJEUTBFNUswRkVRaTgwZWpoVloyRkhVSG9yZEVKNVRYaG9lRzlFUkU1dmNtZGtTRlZYUmxCeWJWaFBiM2RzVEhVeGFFWlZORmhxU1ZOeGN6Qm5ObXBSYlRWWE9EUnRTVEpaWVV4ek56aGtkRVpMV2tKdVNua3laemhtVjJoNVJHZG1jbWt5Tm5kbGJWUkxhRWR3TlhWR2IzbDVUMmd6YVdaMlkwVXZWRFpQTlVwT1NteHpUelZ3TTFkNFNERjVkV3BCVTNKVFVHMVhNM0lyYUVKWVIyeFhla2M1V25oV1NHZGFZVVpxTTJaSlMxbDJWRTFaV2xvemEzTmphR3h2UW1oSWRGTlRXVW8zYm13eWN6RnFZMFp1ZUVOeE9ETlRRWEV4VjJjeWIzZFZRbmRUU1ZKb1dFbHFPWGM0ZWtoV01EQkRNMWhSV2tKdWFVVndXWEZhVTBaUWRtZ3lVWEowWjJOWWNETmtXR2hsZG5aQ1J5ODBkVGR6ZFcxMU0wNTZaMWRDZW1sdVYyNHlkSGRsUzBFMmJrbHZSRlF5VW5sUk5FbFBia3AyT1VSdFpVbG5aVmh5WTBWU1VXOW9PVEJVVlRjdmFreGxUVEJDVFVKek5EZHNVekphZVZRelkxUkNVMEp1WVUxdU9XWXdVbXhMTWtsT1FuQllORWgxU2pOQ2J6ZHNTbVJIZGpCclVrSm9lVUZRUW10REsxZENXSGQzUWt3eEsyOHpaRTgyUkhJM1FtRnlUa3BxWm1GSWJEbHZiRUZLTjNoM2N6RlBVVWQ2ZFhaQ2FVVkZhVkZRTUU1cE1VRjVPRXRJUTJoc2NtNTFaMHRTWkhOMVJETndXVXBOT0U0d1JpOTVURGRrZUhwa1VqRnpZalExUTJRMFpqZG1NMHBSTUVaMFFsWkxhRVJQYTBkSlkzRkpkbGw1Um1Wdk4yMDNkamt6WTBsMWIxSlVXV3hEUkVjMmIzY3paa3hsYlZGbFkwcFhjVE5QZFRKcVFWSnhSa3ByU0ZCR1dtbFBTRlV6WWxsQ01ubHRkelpLYUhObmRsVnVhVVJYWW1SeFpUazNiRWxZY0ZkdFNsaHRSbVEzWTNGQ01GQmhlbGxxTjJRcmJXTXpUVEZrU21sbVozbG5abWh6VFRkQ1ZrbDFlVFpVUTJSbmVFdDVhMkZaU1RCQ1JFeHZSbXhWVFZNMFpsQTRTV1owVmtKWFFtbHVSVmRoTWpGQ2VXUlNabWd4Wkc1alRreDFTREpUVGtwRmFsQllaRVZXUVZoYVFtTk9VMmhvWkVjNFVHMVBWVGRLVDBReWMwWTJWMFpuU0hKSFNYbG1ibUZaWXpoaVZqbFBVMlV6TnpFeWNVMXNiV0pFT0VodFJUUjBRV3hWVkU5a1puVnZXa1JRVTFkUmFtZHlXV2RpWm1SelN5OHhlVlZ0ZW1rd05EaHlXa1F4VEc5a2NIWjJibVo0VFZGcVZHTTJPRk1yVDB3eWF6VXhlbGxIVDA0M1EwcExSVEZvY1c1TU5ubHJabEpSYzBKQlducEtaR1kyZUhSelIxcHdZVEZyTVVSWloxQnVNbmxWZURGVlJEaE5NVE5xYldneVdHUTBjMWd6VFRoWmJXeERVV0ZrVjFOcWFtWndSakZQY0hoMFJGaG9aMjF2V0c5a1NYaFlUbGRsTXpJMU5tOUpVWGt5Y1dKSlNVWlBOMnRYUlVzM00wMVRlak5HUzNWU2FtSmpaMWxDUjFVck4xbEtOVFk1YVRac1Qyc3lVRVJqU1RkTFV6WTNNams1YTBoeVlpOUthemd5YUcwNFpGaFRRV2R6Ymt4a05rRm1aREExT0dKUVZFcExNa2wySzA5MmIyMDFkbGxYVjNJNFoyRmtZbUpYYUd0cVJHNVpNelZrZFRaWFdFaFJSRWd6Wm1KUmFsSkZTRlpDT1Vsa1ZIQkJWR294VVU1WEwzbzNTMWR6UVhwc2JuZzNNa0ptVHpoTFkyazNkSEZZVlcxbVYzSkZLMlVyVkZST1NEbDFNVU5UYlU0NWVVUk9VbFpGUlRoR05HTTJiR0l6TlZSelVWaHJjVkpOTlhWa1JXdFFSV0V4YkRaS2N6TlBOSGRqUmxoTk1IcGxPRWh4U0RkR1RqVTJhazFpZUhkMGVWbGtSR3BoVmxacE5IRjFkMGMyZFc1aVpYUlFkRWhXWVdKcE9VSnVOVzlrV1RkUFZtMHhMekZWYUZoRE5VUXlSbVZyZVRNMldscFhTSGtyU1V4MVNYSk5VRTA0T0ZKWWFVTk5TRFJhUTIxdU56SXlOa3RhYVZST1lsVjBSalJ2WVhsQk5HdExOREU0ZEdwTFYyMDRRM293UkdSeFNFNU5URVZxUWpSUFUyOWxWVzVRVlRNclRFNXBhekk1TjJab1lqUkNSMjVSV2psTU1rUnNXa2hWV1RsV0syMUpUREpQTW5BeVkwZGhPVmhUUjBOdmVGVXdhbkZZTm5Vdk1WSXZNMGhoYTFOM1pFMUljMlJ2VTJvMVN6TnpiSEJZU1dKalRtdG1OeTlVTWtSa2MybERjVVpSV0ZkcVkxaEViV1JXZEZONE4xSmhjVGRIY0ZjNFNFZHJWMWx5VTNKak9XWk1ZbWR0UW1KS04zVnBiM0ZQUVdSelVWRlNOVkZ0Y0dRclkxVllSRUYxY0hnemJsTllVVmcyWjJsVWFUaGllakpSZGs1SEwzcFlaRXhMTUVkWVZqaFBRbkZqTUdsNmFDODFWVnBvV0hCclFqWnNhMVJaYVcxa1lWRk9NUzlUYzFwRmJuVlBZV1pRYmpKaE5GVTBMMnhHYTJSMVJVdEhWRE5FZUhNM056UlNWbk00ZEdGaGNWbzBWVXBCTnprdmVub3JiMmxaVDB3eVEwcGxORFpvU21kR00zQnJSazFpTlV4eGIwdFJNMUpNU0dKSk1VdGlkekIyZVZORGJtdExjMGRQVWt0NGFXRjFka2wwUzJaNWNsUkpha2wwTURjdlRVdE9jRXBGUlZBNUwwOTJhRzlhYzNWeVJFTm9WbXhuZFhOSk1FTXhhRE0yVkZoalZWTTFNVE5MZGtoTlF6Uk1VMk5GY2pkRFduVjJRemxpZHpORGNtWkJSMDVWUjFsa1p5OVRaMVJHVWtzdlVWZEVabU5QTldwNEswSm5lVWxsTTNsVmJFbGhNalJoYlVReGRYcDFRVWM1TlU1V2NGSTRiV1ZhUkZkUllqUTRiV0ZPTTFoVU5rc3phMlIyWkVkUFJWRktOV2t3U2xGeVRuUkliV3BUV1hSTVR6QjNiemRxUmxOMlRVdFBjM1kyV1VOSlVtRkZSbVl4YUZwMmJrc3hSM05zUm5ORlJXTm1jRzVSV0hGek5sbHlVa2RYVDNwSlkyb3pXa2h2UkdabVZsTkNRMGt5YVc5TFozSmxPSFoxU1V0T1Z6SmxNMFJ2YVcxTU9YYzNNU3R3U0dacFRXaE5WQzlRUVhsMmNGUnFPRTFSVDB4Q2FtdHdkWFZDY0VWNFJGSlBVbGRCVld0d1pHOXRTRE5TZEhJd09GQnNZMFZEYm1adVJtVlRRalpRVHpjdmJWQldaR0pxTTJOcFNtdHViM0kxVEVGS09URXZiR1EyVEc1dVZHeFZaMnB3T1M4MmJuQXZNV1JzVWpNeldEbE9WVUpYVUdSRVFsSjVja2cxVURWcFpXTkxjRWh5U1dsVlpucE9RemxzZEROcVpGQlZTMXBUY20xQ1FuaEdaSFZQYW1vd1FscGFjMmhOYTBoRFNsQTVNemN3TkdwWlpYWlhSRXBHYm5BNFIzRmtTREJ4ZFVoT2RFTlVTRk5UUm1SclJGcFliR0paZFdZNVltTldkRE5LVTB0NldqbE5XVzlMSzFWWk9IZDVhV0Y2WTA1a04wOVRRV2hLYW1GTlRXVnFabk5HWkdzM1FteEdVRFpxYzI1UFNIY3pNMlJOVlZkdGExbFVlakp5VnpkWGJXWk5VV0V2TkRCQ2FqbHJPRkJOWkZWdVdXc3dORFpHVmxBMmR6MDkucHY2SGFiM0l0bHJ2QjFqaks5b1dHQ2dsbU9UN29yRnVvcE8wRHp0czJNcmxXOXFBRGo1U2tvWDdLUFBJUURDaWpBWlI3akVJc2tiTEZiSTdKc1h3MEE=" /><input name="_eventId" type="hidden" value="submit" /><input name="lt" type="hidden" value="" /><input name="geolocation" type="hidden" /><input accesskey="l" class="btn-login" tabindex="6" name="submit" type="submit" value="LOGIN" /></section>
+<div id="Links" class="row"><a href="http://www.byui.edu/password">Change password</a> &nbsp; | &nbsp; <a href="https://web.byui.edu/Username/ForgotPassword.aspx">Forgot username or password</a> &nbsp; | &nbsp; <a href="https://web.byui.edu/Username/CreateUsername.aspx">Create username</a></div>
 </div>
 </div>
-    </div>
-    </main> <!-- end site-content --><footer role="contentinfo" class="global-footer">
-        <div class="footer-graphic jumbotron"></div>
-
-        <div class="footer-audience">
-            <div class="container">
-                <nav class="audience-nav text-center">
-                    <a href="http://www.byui.edu/future-students/" class="btn btn-primary btn-sm">Future Students</a>
-                    <a href="https://my.byui.edu/ics" class="btn btn-primary btn-sm">Current Students</a>
-                    <a href="https://my.byui.edu/ics" class="btn btn-primary btn-sm">Employees</a>
-                    <a href="http://beta.byui.edu/parents" class="btn btn-primary btn-sm">Parents and Family</a>
-                    <a href="http://www.byuiconnect.com/s/1085/07-idaho/idaho-start.aspx?gid=4&amp;pgid=61" class="btn btn-primary btn-sm">Alumni</a>
-                </nav><!-- /.audience-nav -->
-
-            </div><!-- /.container -->
-        </div><!-- /.footer-audience -->
-
-        <div class="footer-links">
-            <div class="container">
-                <div id="footerAccordion" class="">
-                    <div class="row">
-                        <nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left">
-                            <a class="footer-column-heading" data-toggle="collapse" data-parent="#footerAccordion" href="#collapseContact">Contact <b class="caret"></b></a>
-                            <address class="no-margin">
-                                <ul id="collapseContact" class="no-margin collapse">
-                                    <li>
-                                        <span aria-hidden="true" class="icon icon-office">&#160;</span>525 South Center St.<br />
-                                        Rexburg, ID, 83460
-                                    </li>
-                                    <li>
-                                        <span aria-hidden="true" class="icon icon-phone">&#160;</span><a href="tel:12084961411">(208) 496-1411</a>
-                                    </li>
-                                    <li>
-                                        <span aria-hidden="true" class="icon icon-mail">&#160;</span><a href="mailto:ask@byui.edu">ask@byui.edu</a>
-                                    </li>
-                                    <li>
-                                        <span aria-hidden="true" class="icon icon-chat">&#160;</span><a href="http://www.byui.edu/feedback/?cid=fli:192">Feedback</a>
-                                    </li>
-                                </ul>
-                            </address>
-                        </nav><!-- /.footer-column -->
-                        <nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left">
-                            <a class="footer-column-heading" data-toggle="collapse" data-parent="#footerAccordion" href="#collapseFollow">Follow <b class="caret"></b></a>
-                            <ul id="collapseFollow" class="footer-social no-margin collapse">
-                                <li><span aria-hidden="true" class="icon icon-facebook">&#160;</span><a href="http://www.byui.edu/social-media/facebook">Facebook</a></li>
-                                <li><span aria-hidden="true" class="icon icon-twitter">&#160;</span><a href="http://www.byui.edu/social-media/twitter">Twitter</a></li>
-                                <li><span aria-hidden="true" class="icon icon-youtube">&#160;</span><a href="http://www.byui.edu/social-media/youtube">Youtube</a></li>
-                                <li><span aria-hidden="true" class="icon icon-linkedin">&#160;</span><a href="http://www.byui.edu/social-media/linkedin">LinkedIn</a></li>
-                            </ul>
-                        </nav><!-- /.footer-column -->
-                        <nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left">
-                            <a href="#collapsePopular" class="footer-column-heading" data-toggle="collapse" data-parent="#footerAccordion">Popular <b class="caret"></b></a>
-                            <ul id="collapsePopular" class="no-margin collapse">
-                                <li><a href="http://web.byui.edu/devotionalsandspeeches/speeches.aspx">Devotionals</a></li>
-                                <li><a href="http://www.byui.edu/financial-services/my-personal-account/i-card">ID Cards</a></li>
-                                <li><a href="http://www.byui.edu/human-resources/employment-opportunities">Jobs and Employment</a></li>
-                                <li><a href="http://byui.universitytickets.com/user_pages/event_listings.aspx">Ticket Office</a></li>
-                                <li><a href="http://web.byui.edu/WardsAndStakes/UnitInfo">Wards and Stakes</a></li>
-                            </ul>
-                        </nav><!-- /.footer-column -->
-                        <nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left">
-                            <a href="#collapseHelp" class="footer-column-heading" data-toggle="collapse" data-parent="#footerAccordion">Help <b class="caret"></b></a>
-                            <ul id="collapseHelp" class="no-margin collapse">
-                                <li><a href="http://www.byui.edu/ask/live-chat/?cid=hli:109">Ask BYUI</a></li>
-                                <li><a href="http://www.byui.edu/disabilities/">Disability Services</a></li>
-                                <li><a href="http://www.byui.edu/information-technology">Technical Help Desk</a></li>
-                                <li><a href="http://www.byui.edu/student-support">Student Support</a></li>
-                            </ul>
-                        </nav><!-- /.footer-column -->
-                    </div><!-- /.row -->
-                </div>
-            </div><!-- /.container -->
-        </div><!-- /.footer-links -->
-
-        <div class="footer-brand">
-            <div class="container">
-                <div class="school-branding row text-center">
-                    <p>
-                        <a href="http:///www.byu.edu/">BYU Provo</a>&#160;&#160;|&#160;&#160;
-                        <a href="http:///www.byuh.edu/">BYU Hawaii</a>&#160;&#160;|&#160;&#160;
-                        <a href="http://www.ldsbc.edu/">LDS Business College</a>&#160;&#160;|&#160;&#160;
-                        <a href="http://www.byui.edu/online/pathway">Pathway</a>
-                    </p>
-                </div><!-- /.school-branding -->
-
-                <div class="copyright row text-center">
-                    <a href="http://www.byui.edu/copyright/policy/terms-of-use/?cid=fli:190">Copyright &copy;<script>document.write(new Date().getFullYear())</script></a>&#160;&#160;|&#160;&#160;<a href="http://www.byui.edu/legal">Legal Notices</a>
-                </div><!-- /.copyright -->
-
-                <div class="church-branding row text-center">
-                    <p>
-                        <a href="http://www.lds.org/"><span class="icon icon-lds-church"></span><span class="sr-only">The Church of Jesus Christ of Latter-Day Saints</span></a>
-                    </p>
-                </div><!-- /.church-branding -->
-            </div><!-- /.container -->
-        </div><!-- /.footer-brand -->
-        <!--
+<div id="mobileHelp" class="row"><a href="http://www.byui.edu/helpdesk">Need help logging in?</a></div>
+<div id="noticeWrapper">
+<div id="notice"><span style="font-weight: bold;">Notice:</span> Unauthorized access is strictly prohibited and may be subject to criminal prosecution.</div>
+<div id="closeBrowser" style="padding-top: 15px;"><span style="font-weight: bold;">Exit Your Browser: </span> To continue to protect the privacy of your information, you should exit the browser before leaving this device.</div>
+</div>
+</form><!-- Move Cursor to name field --></div>
+</div>
+</div>
+<!-- end site-content --><footer class="global-footer" role="contentinfo">
+<div class="footer-graphic jumbotron">&nbsp;</div>
+<div class="footer-audience">
+<div class="container"><nav class="audience-nav text-center"><a class="btn btn-primary btn-sm" href="http://www.byui.edu/future-students/">Future Students</a> <a class="btn btn-primary btn-sm" href="https://my.byui.edu/ics">Current Students</a> <a class="btn btn-primary btn-sm" href="https://my.byui.edu/ics">Employees</a> <a class="btn btn-primary btn-sm" href="http://beta.byui.edu/parents">Parents and Family</a> <a class="btn btn-primary btn-sm" href="http://www.byuiconnect.com/s/1085/07-idaho/idaho-start.aspx?gid=4&amp;pgid=61">Alumni</a></nav><!-- /.audience-nav --></div>
+<!-- /.container --></div>
+<!-- /.footer-audience -->
+<div class="footer-links">
+<div class="container">
+<div id="footerAccordion" class="">
+<div class="row"><nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left"><a class="footer-column-heading" href="#collapseContact" data-toggle="collapse" data-parent="#footerAccordion">Contact </a><address class="no-margin">
+<ul id="collapseContact" class="no-margin collapse">
+<li><span class="icon icon-office" aria-hidden="true">&nbsp;</span>525 South Center St.<br /> Rexburg, ID, 83460</li>
+<li><span class="icon icon-phone" aria-hidden="true">&nbsp;</span><a href="tel:12084961411">(208) 496-1411</a></li>
+<li><span class="icon icon-mail" aria-hidden="true">&nbsp;</span><a href="mailto:ask@byui.edu">ask@byui.edu</a></li>
+<li><span class="icon icon-chat" aria-hidden="true">&nbsp;</span><a href="http://www.byui.edu/feedback/?cid=fli:192">Feedback</a></li>
+</ul>
+</address></nav><!-- /.footer-column --><nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left"><a class="footer-column-heading" href="#collapseFollow" data-toggle="collapse" data-parent="#footerAccordion">Follow </a>
+<ul id="collapseFollow" class="footer-social no-margin collapse">
+<li><span class="icon icon-facebook" aria-hidden="true">&nbsp;</span><a href="http://www.byui.edu/social-media/facebook">Facebook</a></li>
+<li><span class="icon icon-twitter" aria-hidden="true">&nbsp;</span><a href="http://www.byui.edu/social-media/twitter">Twitter</a></li>
+<li><span class="icon icon-youtube" aria-hidden="true">&nbsp;</span><a href="http://www.byui.edu/social-media/youtube">Youtube</a></li>
+<li><span class="icon icon-linkedin" aria-hidden="true">&nbsp;</span><a href="http://www.byui.edu/social-media/linkedin">LinkedIn</a></li>
+</ul>
+</nav><!-- /.footer-column --><nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left"><a class="footer-column-heading" href="#collapsePopular" data-toggle="collapse" data-parent="#footerAccordion">Popular </a>
+<ul id="collapsePopular" class="no-margin collapse">
+<li><a href="http://web.byui.edu/devotionalsandspeeches/speeches.aspx">Devotionals</a></li>
+<li><a href="http://www.byui.edu/financial-services/my-personal-account/i-card">ID Cards</a></li>
+<li><a href="http://www.byui.edu/human-resources/employment-opportunities">Jobs and Employment</a></li>
+<li><a href="http://byui.universitytickets.com/user_pages/event_listings.aspx">Ticket Office</a></li>
+<li><a href="http://web.byui.edu/WardsAndStakes/UnitInfo">Wards and Stakes</a></li>
+</ul>
+</nav><!-- /.footer-column --><nav class="footer-column col-all-12 col-xs-6 col-sm-3 pull-left"><a class="footer-column-heading" href="#collapseHelp" data-toggle="collapse" data-parent="#footerAccordion">Help </a>
+<ul id="collapseHelp" class="no-margin collapse">
+<li><a href="http://www.byui.edu/ask/live-chat/?cid=hli:109">Ask BYUI</a></li>
+<li><a href="http://www.byui.edu/disabilities/">Disability Services</a></li>
+<li><a href="http://www.byui.edu/information-technology">Technical Help Desk</a></li>
+<li><a href="http://www.byui.edu/student-support">Student Support</a></li>
+</ul>
+</nav><!-- /.footer-column --></div>
+<!-- /.row --></div>
+</div>
+<!-- /.container --></div>
+<!-- /.footer-links -->
+<div class="footer-brand">
+<div class="container">
+<div class="school-branding row text-center">
+<p><a href="http://localhost/www.byu.edu/">BYU Provo</a>&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://localhost/www.byuh.edu/">BYU Hawaii</a>&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://www.ldsbc.edu/">LDS Business College</a>&nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://www.byui.edu/online/pathway">Pathway</a></p>
+</div>
+<!-- /.school-branding -->
+<div class="copyright row text-center"><a href="http://www.byui.edu/copyright/policy/terms-of-use/?cid=fli:190">Copyright &copy;</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.byui.edu/legal">Legal Notices</a></div>
+<!-- /.copyright -->
+<div class="church-branding row text-center">
+<p><a href="http://www.lds.org/"><span class="sr-only">The Church of Jesus Christ of Latter-Day Saints</span></a></p>
+</div>
+<!-- /.church-branding --></div>
+<!-- /.container --></div>
+<!-- /.footer-brand --> <!--
           BEGIN INTRUSIVE FEEDBACK BUTTON:
           THIS BUTTON SHOULD BE REMOVED
           AS SOON AS YOU CAN DO SO
           WITHOUT LOSING YOUR JOB
-        --><style>
-            .feedback-toggle {
-                position: fixed;
-                bottom: -3px;
-                right: -4px;
-                display: none;
-                border: 1px solid #fff;
-            }
-        </style>
-        <script>
-            $(function () {
-                $(".feedback-toggle").show();
-            });
-        </script>
-
-        <!-- Button trigger modal --><a data-toggle="modal" href="#feedbackModal" class="feedback-toggle btn btn-primary hidden-xs"><span class="icon-chat pull-left"></span><span class="pull-left visible-lg visible-xl">&#160;Feedback</span></a>
-
-        <!-- Modal --><div class="feedback-modal modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&#215;</button>
-                        <h4 class="modal-title">We want to hear from you!</h4>
-                    </div><!-- /.modal-header -->
-                    <div class="modal-body">
-                        <p>BYU-Idaho values suggestions and ideas that can improve the university. Use our Feedback Form to let us know what you think.</p>
-                    </div><!-- /.modal-body -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a href="http://www.byui.edu/feedback/" type="button" class="btn btn-primary"><span class="icon-chat">&#160;</span>Give Feedback</a>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-        <!-- END INTRUSIVE FEEDBACK BUTTON --></footer> <!-- /.global-footer --><script src="//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js"></script>
-    <script type="text/javascript" src="/cas/js/cas.js"></script>
-    <script type="text/javascript" src="/cas/js/custom.js"></script>
-
-    <script type="text/javascript" src="//web.byui.edu/Omniture/s_code.js"></script>
-    <script type="text/javascript" src="//web.byui.edu/Omniture/omniture_code.js"></script>
-</body>
-</html>
+        --><!-- Button trigger modal --><a class="feedback-toggle btn btn-primary hidden-xs" href="#feedbackModal" data-toggle="modal"><span class="pull-left visible-lg visible-xl">&nbsp;Feedback</span></a> <!-- Modal -->
+<div id="feedbackModal" class="feedback-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header"><button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+<h4 class="modal-title">We want to hear from you! (for reals though)</h4>
+</div>
+<!-- /.modal-header -->
+<div class="modal-body">
+<p>BYU-Idaho values suggestions and ideas that can improve the university. Use our Feedback Form to let us know what you think.</p>
+</div>
+<!-- /.modal-body -->
+<div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Close</button> <a class="btn btn-primary" href="http://www.byui.edu/feedback/" type="button"><span class="icon-chat">&nbsp;</span>Give Feedback</a></div>
+</div>
+<!-- /.modal-content --></div>
+<!-- /.modal-dialog --></div>
+<!-- /.modal --> <!-- END INTRUSIVE FEEDBACK BUTTON --></footer><!-- /.global-footer -->
