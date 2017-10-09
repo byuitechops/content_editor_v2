@@ -6,7 +6,10 @@
   		<base href="https://byuidev.equella.ecollege.com/original/">
   		<link type="text/css" rel="stylesheet" href="p/r/6.4.r1397/com.tle.mypages/css/mypagesviewer.css" />
   	</head>
-	<body class="bodyclass htmlcontent"><div><p>Course content for <span>BH 101</span></p>
-
-</div></body>
+	<body class="bodyclass htmlcontent">
+<div>
+<h1>Course content for&nbsp;BH 101</h1>
+<p>Page content here</p>
+</div>
+</body>
 </html>
